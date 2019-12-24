@@ -4,6 +4,7 @@ import argparse
 import pymongo
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
+from pprint import pprint
 
 def main():
     parser = argparse.ArgumentParser()
@@ -21,8 +22,8 @@ def mongoConnect(d,p):
 
     print(f'Connecting to {d}:{p}')
     global mongoConnection
-    mongoConnection = MongoClient(d, p, serverSelectionTimeoutMS=10, connectTimeoutMS=20000,maxPoolSize=50)
-
+    mongoConnection = MongoClient(d, p,maxPoolSize=50)
+    
     try:
         info = mongoConnection.server_info()
         getMongoDatabases()
@@ -34,6 +35,7 @@ def getMongoDatabases():
     '''
     getMongoDatabases takes the client connection above and enumerates the visible database names.
     '''
+    
     global mongo_dbnames
     mongo_dbnames = list(mongoConnection.list_database_names())
 
@@ -53,12 +55,13 @@ def getMongoDatabases():
 
 def getMongoCollections(db_selection):
     '''
-    getMongoCollections takes our list of databases above and attempts to extract sample data from each collection.
+    getMongoCollections takes our list of databases above and attempts to extract sample data from each.
     '''
 
     global db_connection
     global mongo_collections
     db_connection = mongoConnection[db_selection]
+    
     print('\nThe following collections have been identified in %s.\n' % db_selection)
 
     mongo_collections = []
@@ -69,7 +72,8 @@ def getMongoCollections(db_selection):
     print('\nSample data from collections:\n')
     for coll in mongo_collections:
         cursor = db_connection[coll].find_one()
+        
         if cursor is not None:
-            print('%s\n%s\n' % (coll,cursor))
- 
+           print('%s\n%s\n' % (coll,cursor))
+
 if __name__ == "__main__":main()
