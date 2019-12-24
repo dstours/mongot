@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import argparse
 import pymongo
 from pymongo import MongoClient
@@ -14,9 +15,9 @@ def main():
         mongoConnect(args.d,args.p)
 
 def mongoConnect(d,p):
-  '''
-  mongoConnect takes the destination and port and initiates the mongo client connection.
-  '''
+    '''
+    mongoConnect takes the destination and port and initiates the mongo client connection.
+    '''
 
     print(f'Connecting to {d}:{p}')
     global mongoConnection
@@ -30,9 +31,9 @@ def mongoConnect(d,p):
         print('Server is not responding.')
 
 def getMongoDatabases():
-  '''
-  getMongoDatabases takes the client connection above and enumerates the visible database names.
-  '''
+    '''
+    getMongoDatabases takes the client connection above and enumerates the visible database names.
+    '''
     global mongo_dbnames
     mongo_dbnames = list(mongoConnection.list_database_names())
 
